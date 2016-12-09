@@ -1,0 +1,6 @@
+# Creative Tabs
+itemGroup.magetech=MageTech
+
+#Items
+item.magetech:research_note.name=Research Note
+item.magetech:research_scroll.name=Research Scroll

@@ -1,0 +1,25 @@
+[ 
+{
+  "modid": "MageTech",
+  "name": "MageTech",
+  "description": "MageTech the magic based Tech - Mod",
+  "version": "1.0",
+  "mcversion": "1.8.10",
+  "url": "",
+  "updateUrl": "",
+  "authorList": 
+  [
+    "techmage"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": 
+  [
+
+  ],
+  "parent":"",
+  "dependencies": 
+  [
+  ]
+}
+]
