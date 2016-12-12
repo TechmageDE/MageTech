@@ -1,5 +1,6 @@
 package com.techmage.magetech.proxy;
 
+import com.techmage.magetech.init.MageTechItems;
 import com.techmage.magetech.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -21,6 +22,8 @@ public class CommonProxy implements IProxy
     @Override
     public void preInit()
     {
+        MageTechItems.preInit();
+
         LogHelper.info("CommonProxy: Pre Initialization Complete!");
     }
 

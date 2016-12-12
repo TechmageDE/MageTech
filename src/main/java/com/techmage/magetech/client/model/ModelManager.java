@@ -1,6 +1,8 @@
 package com.techmage.magetech.client.model;
 
-import com.techmage.magetech.init.MageTechItems;
+import com.techmage.magetech.registry.BlockRegistry;
+import com.techmage.magetech.registry.ItemRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,7 +23,6 @@ public class ModelManager
 
     }
 
-    /*
     public void registerBlockModels()
     {
         BlockRegistry.BLOCKS.stream().filter(block -> !registeredItems.contains(Item.getItemFromBlock(block))).forEach(this::registerBlockItemModel);
@@ -49,11 +50,10 @@ public class ModelManager
     {
         registerItemModelForMeta(Item.getItemFromBlock(block), metadata, variant);
     }
-    */
 
     public void registerItemModels()
     {
-        MageTechItems.RegistrationHandler.ITEMS.stream().filter(item -> !registeredItems.contains(item)).forEach(this::registerItemModel);
+        ItemRegistry.ITEMS.stream().filter(item -> !registeredItems.contains(item)).forEach(this::registerItemModel);
     }
 
     private void registerItemModel(Item item)
