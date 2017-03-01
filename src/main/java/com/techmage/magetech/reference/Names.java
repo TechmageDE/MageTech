@@ -18,6 +18,7 @@ public class Names
 
     public static final class Blocks
     {
+        public static final String TABLE = "table";
         public static final String SHELF_SCROLL = "shelf_scroll";
     }
 }

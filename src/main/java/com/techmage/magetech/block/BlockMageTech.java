@@ -93,7 +93,6 @@ public class BlockMageTech extends Block
         {
             ItemStack itemStack = inventory.getStackInSlot(i);
 
-            // func_190926_b := isEmpty()
             if (!itemStack.isEmpty())
             {
                 Random rand = new Random();
@@ -117,7 +116,6 @@ public class BlockMageTech extends Block
 
                 worldIn.spawnEntity(entityItem);
 
-                // func_190920_e := setStackSize()
                 itemStack.setCount(0);
             }
         }

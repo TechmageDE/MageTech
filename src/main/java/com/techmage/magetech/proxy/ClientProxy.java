@@ -24,6 +24,7 @@ public class ClientProxy extends CommonProxy
     public void preInit()
     {
         ModelManager.INSTANCE.registerItemModels();
+        ModelManager.INSTANCE.registerBlockModels();
 
         LogHelper.info("ClientProxy: Pre Initialization Complete!");
     }
