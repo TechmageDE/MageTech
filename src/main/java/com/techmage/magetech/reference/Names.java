@@ -15,4 +15,9 @@ public class Names
         public static final String RESEARCH_NOTE = "research_note";
         public static final String RESEARCH_SCROLL = "research_scroll";
     }
+
+    public static final class Blocks
+    {
+        public static final String SHELF_SCROLL = "shelf_scroll";
+    }
 }
