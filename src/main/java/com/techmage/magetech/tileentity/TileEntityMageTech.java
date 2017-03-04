@@ -10,14 +10,14 @@ import net.minecraft.util.EnumFacing;
 public class TileEntityMageTech extends TileEntity
 {
     protected String customName;
-    protected byte state;
+
     protected EnumFacing facing;
 
     public TileEntityMageTech()
     {
         customName = "";
-        state = 0;
-        facing = EnumFacing.SOUTH;
+
+        facing = EnumFacing.NORTH;
     }
 
     public String getCustomName()
@@ -28,16 +28,6 @@ public class TileEntityMageTech extends TileEntity
     public void setCustomName(String customName)
     {
         this.customName = customName;
-    }
-
-    public byte getState()
-    {
-        return state;
-    }
-
-    public void setState(byte state)
-    {
-        this.state = state;
     }
 
     public EnumFacing getOrientation()
@@ -63,9 +53,6 @@ public class TileEntityMageTech extends TileEntity
         if (nbtTagCompound.hasKey(Names.NBT.CUSTOM_NAME))
             customName = nbtTagCompound.getString(Names.NBT.CUSTOM_NAME);
 
-        if (nbtTagCompound.hasKey(Names.NBT.STATE))
-            state = nbtTagCompound.getByte(Names.NBT.STATE);
-
         if (nbtTagCompound.hasKey(Names.NBT.DIRECTION))
             facing = EnumFacing.getFront(nbtTagCompound.getByte(Names.NBT.DIRECTION));
     }
@@ -78,7 +65,6 @@ public class TileEntityMageTech extends TileEntity
         if (hasCustomName())
             nbtTagCompound.setString(Names.NBT.CUSTOM_NAME, customName);
 
-        nbtTagCompound.setByte(Names.NBT.STATE, state);
         nbtTagCompound.setByte(Names.NBT.DIRECTION, (byte) facing.ordinal());
 
         return nbtTagCompound;

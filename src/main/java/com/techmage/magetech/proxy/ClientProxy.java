@@ -32,6 +32,8 @@ public class ClientProxy extends CommonProxy
     @Override
     public void init()
     {
+        bindTileEntityRenderer();
+
         LogHelper.info("ClientProxy: Initialization Complete!");
     }
 
@@ -39,6 +41,12 @@ public class ClientProxy extends CommonProxy
     public void postInit()
     {
         LogHelper.info("ClientProxy: Post Initialization Complete!");
+    }
+
+    @Override
+    public void bindTileEntityRenderer()
+    {
+
     }
 
     @Override

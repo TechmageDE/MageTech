@@ -6,5 +6,11 @@ item.magetech:research_note.name=Forschungsnotiz
 item.magetech:research_scroll.name=Forschungsergebnis
 
 #Blocks
-tile.magetech:table.name=Tisch
+tile.magetech:table_oak.name=Eichenholz Tisch
+tile.magetech:table_spruce.name=Fichtenholz Tisch
+tile.magetech:table_birch.name=Birkenholz Tisch
+tile.magetech:table_jungle.name=Jungelholz Tisch
+tile.magetech:table_acacia.name=Acazienholz Tisch
+tile.magetech:table_dark_oak.name=Dunkeleichenholz Tisch
+
 tile.magetech:shelf_scroll.name=Regal für Schriftrollen

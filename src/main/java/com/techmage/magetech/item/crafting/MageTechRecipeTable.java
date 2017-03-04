@@ -1,11 +1,15 @@
 package com.techmage.magetech.item.crafting;
 
+import com.techmage.magetech.init.MageTechBlocks;
+import com.techmage.magetech.reference.Names;
+import com.techmage.magetech.utility.LogHelper;
 import com.techmage.magetech.utility.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -15,22 +19,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class MageTechRecipeWood extends ShapedOreRecipe
+public class MageTechRecipeTable extends ShapedOreRecipe
 {
     List<ItemStack> woodList = new ArrayList<>();
     ItemStack woodCraftedWith = ItemStack.EMPTY;
 
-    public MageTechRecipeWood(Block result, Object... recipe)
+    public MageTechRecipeTable(Block result, Object... recipe)
     {
         this(new ItemStack(result), recipe);
     }
 
-    public MageTechRecipeWood(Item result, Object... recipe)
+    public MageTechRecipeTable(Item result, Object... recipe)
     {
         this(new ItemStack(result), recipe);
     }
 
-    public MageTechRecipeWood(@Nonnull ItemStack result, Object... recipe)
+    public MageTechRecipeTable(@Nonnull ItemStack result, Object... recipe)
     {
         super(result, recipe);
     }
@@ -115,8 +119,10 @@ public class MageTechRecipeWood extends ShapedOreRecipe
     {
         ItemStack craftingResult = output.copy();
 
-        NBTHelper.setTagCompound(craftingResult, "woodCraftedWith", woodCraftedWith.writeToNBT(new NBTTagCompound()));
+        NBTHelper.setString(craftingResult, "woodCraftedWithDisplayName", woodCraftedWith.getDisplayName());
+        NBTHelper.setString(craftingResult, "woodCraftedWithRegistryName", woodCraftedWith.getItem().getRegistryName().toString());
+        NBTHelper.setInteger(craftingResult, "woodCraftedWithMeta", woodCraftedWith.getMetadata());
 
-        return craftingResult;
+        return  craftingResult;
     }
 }

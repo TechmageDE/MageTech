@@ -1,9 +1,11 @@
 package com.techmage.magetech;
 
+import com.techmage.magetech.client.model.bakedmodel.ModelTable;
 import com.techmage.magetech.proxy.CommonProxy;
 import com.techmage.magetech.proxy.IProxy;
 import com.techmage.magetech.reference.Reference;
 import com.techmage.magetech.utility.LogHelper;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -23,6 +25,8 @@ public class MageTech
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        //ModelLoaderRegistry.registerLoader(ModelTable.ModelTableLoader.instance);
+
         commonProxy.preInit();
         sidedProxy.preInit();
 

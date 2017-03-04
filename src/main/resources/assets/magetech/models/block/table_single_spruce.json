@@ -1,0 +1,7 @@
+{
+    "parent": "magetech:block/table_single",
+    "textures":
+    {
+        "table": "magetech:blocks/table_spruce"
+    }
+}

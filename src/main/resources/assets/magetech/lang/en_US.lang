@@ -6,5 +6,11 @@ item.magetech:research_note.name=Research Note
 item.magetech:research_scroll.name=Research Scroll
 
 #Blocks
-tile.magetech:table.name=Table
+tile.magetech:table_oak.name=Oak Table
+tile.magetech:table_spruce.name=Spruce Table
+tile.magetech:table_birch.name=Birch Table
+tile.magetech:table_jungle.name=Jungle Table
+tile.magetech:table_acacia.name=Acacia Table
+tile.magetech:table_dark_oak.name=Dark Oak Table
+
 tile.magetech:shelf_scroll.name=Scroll Shelf

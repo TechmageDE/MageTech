@@ -1,25 +1,17 @@
 {
     "variants":
     {
-        "double=false,facing=north,side=false": { "model": "magetech:table_single", "y": 0 },
-        "double=false,facing=east,side=false": { "model": "magetech:table_single", "y": 90 },
-        "double=false,facing=south,side=false": { "model": "magetech:table_single", "y": 180 },
-        "double=false,facing=west,side=false": { "model": "magetech:table_single", "y": 270 },
+        "normal": { "model": "magetech:table"},
 
-        "double=false,facing=north,side=true": { "model": "magetech:table_single", "y": 0 },
-        "double=false,facing=east,side=true": { "model": "magetech:table_single", "y": 90 },
-        "double=false,facing=south,side=true": { "model": "magetech:table_single", "y": 180 },
-        "double=false,facing=west,side=true": { "model": "magetech:table_single", "y": 270 },
-        
-        
-        "double=true,facing=north,side=false": { "model": "magetech:table_double_left", "y": 270 },
-        "double=true,facing=east,side=false": { "model": "magetech:table_double_left", "y": 0 },
-        "double=true,facing=south,side=false": { "model": "magetech:table_double_left", "y": 90 },
-        "double=true,facing=west,side=false": { "model": "magetech:table_double_left", "y": 180 },
+        "double=false,facing=north": { "model": "magetech:table", "y": 0 },
+        "double=false,facing=east": { "model": "magetech:table", "y": 90 },
+        "double=false,facing=south": { "model": "magetech:table", "y": 180 },
+        "double=false,facing=west": { "model": "magetech:table", "y": 270 },
 
-        "double=true,facing=north,side=true": { "model": "magetech:table_double_right", "y": 270 },
-        "double=true,facing=east,side=true": { "model": "magetech:table_double_right", "y": 0 },
-        "double=true,facing=south,side=true": { "model": "magetech:table_double_right", "y": 90 },
-        "double=true,facing=west,side=true": { "model": "magetech:table_double_right", "y": 180 }
+
+        "double=true,facing=north": { "model": "magetech:table", "y": 270 },
+        "double=true,facing=east": { "model": "magetech:table", "y": 0 },
+        "double=true,facing=south": { "model": "magetech:table", "y": 90 },
+        "double=true,facing=west": { "model": "magetech:table", "y": 180 }
     }
 }

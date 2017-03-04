@@ -1,0 +1,15 @@
+{
+    "variants":
+    {
+        "double=false,facing=north": { "model": "magetech:table_single_dark_oak", "y": 0 },
+        "double=false,facing=east": { "model": "magetech:table_single_dark_oak", "y": 90 },
+        "double=false,facing=south": { "model": "magetech:table_single_dark_oak", "y": 180 },
+        "double=false,facing=west": { "model": "magetech:table_single_dark_oak", "y": 270 },
+        
+        
+        "double=true,facing=north": { "model": "magetech:table_double_dark_oak", "y": 270 },
+        "double=true,facing=east": { "model": "magetech:table_double_dark_oak", "y": 0 },
+        "double=true,facing=south": { "model": "magetech:table_double_dark_oak", "y": 90 },
+        "double=true,facing=west": { "model": "magetech:table_double_dark_oak", "y": 180 }
+    }
+}

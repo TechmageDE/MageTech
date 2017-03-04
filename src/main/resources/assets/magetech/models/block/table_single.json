@@ -1,8 +1,4 @@
 {
-    "textures":
-    {
-        "table": "magetech:blocks/table"
-    },
     "elements":
     [
         {

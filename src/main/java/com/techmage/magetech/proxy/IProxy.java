@@ -13,5 +13,7 @@ public interface IProxy
     void init();
     void postInit();
 
+    public void bindTileEntityRenderer();
+
     void registerEventHandlers();
 }
