@@ -1,15 +1,10 @@
 package com.techmage.magetech.item.crafting;
 
-import com.techmage.magetech.init.MageTechBlocks;
-import com.techmage.magetech.reference.Names;
-import com.techmage.magetech.utility.LogHelper;
-import com.techmage.magetech.utility.NBTHelper;
+import com.techmage.magetech.block.BlockWooden;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -17,24 +12,23 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
-public class MageTechRecipeTable extends ShapedOreRecipe
+public class MageTechRecipeWood extends ShapedOreRecipe
 {
     List<ItemStack> woodList = new ArrayList<>();
     ItemStack woodCraftedWith = ItemStack.EMPTY;
 
-    public MageTechRecipeTable(Block result, Object... recipe)
+    public MageTechRecipeWood(Block result, Object... recipe)
     {
         this(new ItemStack(result), recipe);
     }
 
-    public MageTechRecipeTable(Item result, Object... recipe)
+    public MageTechRecipeWood(Item result, Object... recipe)
     {
         this(new ItemStack(result), recipe);
     }
 
-    public MageTechRecipeTable(@Nonnull ItemStack result, Object... recipe)
+    public MageTechRecipeWood(@Nonnull ItemStack result, Object... recipe)
     {
         super(result, recipe);
     }
@@ -80,7 +74,7 @@ public class MageTechRecipeTable extends ShapedOreRecipe
                     {
                         String oreName = OreDictionary.getOreName(OreDictionary.getOreIDs(slot)[0]);
 
-                        if (Objects.equals(oreName, "slabWood"))
+                        if (oreName.matches("slabWood"))
                             woodList.add(slot);
                     }
 
@@ -117,12 +111,25 @@ public class MageTechRecipeTable extends ShapedOreRecipe
     @Override
     public ItemStack getCraftingResult(InventoryCrafting var1)
     {
-        ItemStack craftingResult = output.copy();
+        BlockWooden block = (BlockWooden) Block.getBlockFromItem(output.getItem());
 
-        NBTHelper.setString(craftingResult, "woodCraftedWithDisplayName", woodCraftedWith.getDisplayName());
-        NBTHelper.setString(craftingResult, "woodCraftedWithRegistryName", woodCraftedWith.getItem().getRegistryName().toString());
-        NBTHelper.setInteger(craftingResult, "woodCraftedWithMeta", woodCraftedWith.getMetadata());
+        return BlockWooden.createItemStack(block, output.getItemDamage(), Block.getBlockFromItem(woodCraftedWith.getItem()), woodCraftedWith.getItemDamage());
+    }
 
-        return  craftingResult;
+    @Override
+    public ItemStack getRecipeOutput()
+    {
+        if (woodCraftedWith != ItemStack.EMPTY && output != null)
+        {
+            BlockWooden block = (BlockWooden) Block.getBlockFromItem(output.getItem());
+            int meta = woodCraftedWith.getItemDamage();
+
+            if (meta == OreDictionary.WILDCARD_VALUE)
+                meta = 0;
+
+            return BlockWooden.createItemStack(block, output.getItemDamage(), Block.getBlockFromItem(woodCraftedWith.getItem()), meta);
+        }
+
+        return super.getRecipeOutput();
     }
 }

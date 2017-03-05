@@ -1,7 +1,0 @@
-{
-    "parent": "magetech:block/table_double",
-    "textures":
-    {
-        "table": "magetech:blocks/table_spruce"
-    }
-}

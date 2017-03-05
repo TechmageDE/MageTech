@@ -18,12 +18,7 @@ public class Names
 
     public static final class Blocks
     {
-        public static final String TABLE_OAK = "table";
-        public static final String TABLE_SPRUCE = "table_spruce";
-        public static final String TABLE_BIRCH = "table_birch";
-        public static final String TABLE_JUNGLE = "table_jungle";
-        public static final String TABLE_ACACIA = "table_acacia";
-        public static final String TABLE_DARK_OAK = "table_dark_oak";
+        public static final String TABLE = "table";
         public static final String SHELF_SCROLL = "shelf_scroll";
     }
 }
