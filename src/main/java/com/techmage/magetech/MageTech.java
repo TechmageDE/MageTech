@@ -1,5 +1,7 @@
 package com.techmage.magetech;
 
+import com.techmage.magetech.electronics.ManagerComponent;
+import com.techmage.magetech.electronics.ManagerSchematic;
 import com.techmage.magetech.proxy.CommonProxy;
 import com.techmage.magetech.proxy.IProxy;
 import com.techmage.magetech.reference.Reference;
@@ -20,11 +22,12 @@ public class MageTech
     public static IProxy sidedProxy;
     private static CommonProxy commonProxy = new CommonProxy();
 
+    public ManagerComponent managerComponent;
+    public ManagerSchematic managerSchematic;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        //ModelLoaderRegistry.registerLoader(ModelTable.ModelTableLoader.instance);
-
         commonProxy.preInit();
         sidedProxy.preInit();
 
@@ -39,6 +42,9 @@ public class MageTech
 
         commonProxy.registerEventHandlers();
         sidedProxy.registerEventHandlers();
+
+        managerComponent = new ManagerComponent(Reference.MOD_ID);
+        managerSchematic = new ManagerSchematic(Reference.MOD_ID);
 
         LogHelper.info("Initialization Complete!");
     }

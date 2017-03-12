@@ -2,21 +2,13 @@ package com.techmage.magetech.block;
 
 import com.techmage.magetech.block.unlistedproperties.UnlistedPropertyFacing;
 import com.techmage.magetech.block.unlistedproperties.UnlistedPropertyString;
-import com.techmage.magetech.client.model.bakedmodel.BakedModelWooden;
 import com.techmage.magetech.tileentity.TileEntityWooden;
-import com.techmage.magetech.utility.LogHelper;
-import com.techmage.magetech.utility.ResourceHelper;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -27,16 +19,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.client.model.IRetexturableModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -48,10 +34,8 @@ import java.util.List;
 
 public class BlockWooden extends BlockMageTech implements ITileEntityProvider
 {
-    public static final UnlistedPropertyString UP_WOOD = new UnlistedPropertyString("wood");
-    public static final UnlistedPropertyFacing UP_FACING = new UnlistedPropertyFacing("facing");
-
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final UnlistedPropertyString WOOD = new UnlistedPropertyString("wood");
+    public static final UnlistedPropertyFacing FACING = new UnlistedPropertyFacing("facing");
 
     public BlockWooden(String name)
     {
@@ -59,8 +43,6 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
 
         setHardness(0.5F);
         useNeighborBrightness = true;
-
-        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
     @Override
@@ -94,8 +76,6 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
-
-        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()));
 
         NBTTagCompound tag = stack.getTagCompound();
 
@@ -199,27 +179,10 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta)
-    {
-        EnumFacing facing = EnumFacing.getFront(meta);
-
-        if (facing.getAxis() == EnumFacing.Axis.Y)
-            facing = EnumFacing.NORTH;
-
-        return getDefaultState().withProperty(FACING, facing);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state)
-    {
-        return state.getValue(FACING).getIndex();
-    }
-
-    @Override
     protected BlockStateContainer createBlockState()
     {
-        IProperty[] listedProperties = new IProperty[] { FACING };
-        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[] {UP_WOOD, UP_FACING };
+        IProperty[] listedProperties = new IProperty[] {  };
+        IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[] { WOOD, FACING };
 
         return new ExtendedBlockState(this, listedProperties, unlistedProperties);
     }
@@ -259,45 +222,6 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
         }
 
         return stack;
-    }
-
-    public static void replaceBlocksModels(String location, ModelBakeEvent event)
-    {
-        ResourceLocation modelLocation =  ResourceHelper.getResource("block/" + location);
-
-        for (EnumFacing facing : FACING.getAllowedValues())
-        {
-            ModelResourceLocation modelVariantLocation = new ModelResourceLocation(ResourceHelper.resource(location),
-                    String.format("%s=%s", FACING.getName(), facing));
-
-            replaceBlockModel(modelVariantLocation, modelLocation, event);
-        }
-    }
-
-    private static void replaceBlockModel(ModelResourceLocation modelVariantLocation, ResourceLocation modelLocation, ModelBakeEvent event)
-    {
-        try
-        {
-            IModel model = ModelLoaderRegistry.getModel(modelLocation);
-
-            if (model instanceof IRetexturableModel)
-            {
-                IRetexturableModel tableModel = (IRetexturableModel) model;
-                IBakedModel standard = event.getModelRegistry().getObject(modelVariantLocation);
-
-                if (standard instanceof IPerspectiveAwareModel)
-                {
-                    IBakedModel finalModel = new BakedModelWooden((IPerspectiveAwareModel) standard, tableModel, DefaultVertexFormats.BLOCK);
-
-                    event.getModelRegistry().putObject(modelVariantLocation, finalModel);
-                }
-            }
-        }
-
-        catch(Exception e)
-        {
-            LogHelper.error(e);
-        }
     }
 
     @Override

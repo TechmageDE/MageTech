@@ -24,25 +24,23 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.IRetexturableModel;
-import net.minecraftforge.client.model.SimpleModelState;
-import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
 import javax.vecmath.Matrix4f;
 import java.util.List;
 import java.util.Map;
 
 public class BakedModelWooden implements IPerspectiveAwareModel
 {
-    private final IPerspectiveAwareModel modelDefault;
-    private final IRetexturableModel modelWooden;
+    protected IPerspectiveAwareModel modelDefault;
+    protected IRetexturableModel modelWooden;
 
-    private final Map<String, IBakedModel> cache = Maps.newHashMap();
-    private final Function<ResourceLocation, TextureAtlasSprite> textureGetter;
-    private final VertexFormat format;
-    private final ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms;
+    protected final Map<Map<String, EnumFacing>, IBakedModel> cache = Maps.newHashMap();
+    protected final Function<ResourceLocation, TextureAtlasSprite> textureGetter;
+    protected final VertexFormat format;
 
     public BakedModelWooden(IPerspectiveAwareModel modelDefault, IRetexturableModel modelWooden, VertexFormat format)
     {
@@ -51,7 +49,6 @@ public class BakedModelWooden implements IPerspectiveAwareModel
 
         this.textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
         this.format = format;
-        this.transforms = ModelHelper.getTransforms(modelDefault);
     }
 
     protected IBakedModel getActualModel(String texture, EnumFacing facing)
@@ -60,21 +57,22 @@ public class BakedModelWooden implements IPerspectiveAwareModel
 
         if (texture != null)
         {
-            if (cache.containsKey(texture))
-                bakedModel = cache.get(texture);
+            Map<String, EnumFacing> cacheKey = Maps.newHashMap();
+            cacheKey.put(texture, facing);
+
+            if (cache.containsKey(cacheKey))
+                bakedModel = cache.get(cacheKey);
 
             else if (modelWooden != null)
             {
                 ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
 
                 builder.put("wood", texture);
-
                 IModel modelRetextured = modelWooden.retexture(builder.build());
-                IModelState modelState = new SimpleModelState(transforms);
 
-                bakedModel = modelRetextured.bake(modelState, format, textureGetter);
+                bakedModel = modelRetextured.bake(new TRSRTransformation(TRSRTransformation.getMatrix(facing)), format, textureGetter);
 
-                cache.put(texture, bakedModel);
+                cache.put(cacheKey, bakedModel);
             }
         }
 
@@ -91,13 +89,13 @@ public class BakedModelWooden implements IPerspectiveAwareModel
         {
             IExtendedBlockState extendedState = (IExtendedBlockState) state;
 
-            if (extendedState.getUnlistedNames().contains(BlockWooden.UP_WOOD))
-                texture = extendedState.getValue(BlockWooden.UP_WOOD);
+            if (extendedState.getUnlistedNames().contains(BlockWooden.WOOD))
+                texture = extendedState.getValue(BlockWooden.WOOD);
 
-            if (extendedState.getUnlistedNames().contains(BlockWooden.UP_FACING))
-                face = extendedState.getValue(BlockWooden.UP_FACING);
+            if (extendedState.getUnlistedNames().contains(BlockWooden.FACING))
+                face = extendedState.getValue(BlockWooden.FACING);
 
-            state = extendedState.withProperty(BlockWooden.UP_FACING, null);
+            state = extendedState.withProperty(BlockWooden.FACING, null);
         }
 
         if (texture.matches("missingno"))
@@ -136,6 +134,7 @@ public class BakedModelWooden implements IPerspectiveAwareModel
         return modelDefault.getItemCameraTransforms();
     }
 
+    @Nonnull
     @Override
     public ItemOverrideList getOverrides()
     {

@@ -1,6 +1,6 @@
 package com.techmage.magetech.tileentity;
 
-import com.techmage.magetech.block.BlockWooden;
+import com.techmage.magetech.block.BlockTable;
 import com.techmage.magetech.utility.ModelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -11,12 +11,11 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public class TileEntityWooden extends TileEntityMageTech
+public class TileEntityTable extends TileEntityWooden
 {
-    public static final String TAG_WOOD = "wood";
-    public static final String TAG_FACING = "facing";
+    public static final String TAG_DOUBLE = "double";
 
-    public TileEntityWooden()
+    public TileEntityTable()
     {
         super();
     }
@@ -36,10 +35,13 @@ public class TileEntityWooden extends TileEntityMageTech
         }
 
         if (!texture.isEmpty())
-            state = state.withProperty(BlockWooden.WOOD, texture);
+            state = state.withProperty(BlockTable.WOOD, texture);
 
         EnumFacing facing = getFacing();
-        state = state.withProperty(BlockWooden.FACING, facing);
+        state = state.withProperty(BlockTable.FACING, facing);
+
+        Boolean isDouble = getIsDouble();
+        state = state.withProperty(BlockTable.DOUBLE, isDouble);
 
         return state;
     }
@@ -60,9 +62,11 @@ public class TileEntityWooden extends TileEntityMageTech
 
         NBTBase feet = tag.getTag(TAG_WOOD);
         NBTBase facing = tag.getTag(TAG_FACING);
+        NBTBase isDouble = tag.getTag(TAG_DOUBLE);
 
         getTileData().setTag(TAG_WOOD, feet);
         getTileData().setTag(TAG_FACING, facing);
+        getTileData().setTag(TAG_DOUBLE, isDouble);
 
         readFromNBT(tag);
     }
@@ -87,6 +91,16 @@ public class TileEntityWooden extends TileEntityMageTech
     public EnumFacing getFacing()
     {
         return EnumFacing.getFront(getTileData().getInteger(TAG_FACING));
+    }
+
+    public void setIsDouble(boolean isDouble)
+    {
+        getTileData().setBoolean(TAG_DOUBLE, isDouble);
+    }
+
+    public boolean getIsDouble()
+    {
+        return getTileData().getBoolean(TAG_DOUBLE);
     }
 
     public void updateTextureBlock(NBTTagCompound tag)
