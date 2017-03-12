@@ -1,4 +1,4 @@
-package com.techmage.magetech.electronics;
+package com.techmage.magetech.electronics.schematic;
 
 public class IOPin
 {

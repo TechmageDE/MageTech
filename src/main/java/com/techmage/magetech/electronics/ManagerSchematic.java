@@ -1,5 +1,10 @@
 package com.techmage.magetech.electronics;
 
+import com.techmage.magetech.electronics.component.Component;
+import com.techmage.magetech.electronics.component.Connection;
+import com.techmage.magetech.electronics.loader.LoaderSchematic;
+import com.techmage.magetech.electronics.schematic.IOPin;
+import com.techmage.magetech.electronics.schematic.Schematic;
 import com.techmage.magetech.utility.LogHelper;
 import scala.collection.Iterator;
 import scala.reflect.io.Directory;
@@ -14,7 +19,7 @@ public class ManagerSchematic
 
     private LoaderSchematic loaderSchematic;
 
-    public ArrayList<Schematic> loadedSchematics;
+    private  ArrayList<Schematic> loadedSchematics;
 
     public ManagerSchematic(String MOD_ID)
     {

@@ -1,5 +1,8 @@
 package com.techmage.magetech.electronics;
 
+import com.techmage.magetech.electronics.component.ComponentPin;
+import com.techmage.magetech.electronics.component.ComponentType;
+import com.techmage.magetech.electronics.loader.LoaderComponent;
 import com.techmage.magetech.utility.LogHelper;
 import scala.collection.Iterator;
 import scala.reflect.io.Directory;
@@ -54,7 +57,7 @@ public class ManagerComponent
         return componentsLoaded;
     }
 
-    ComponentType getComponentType(String id)
+    public ComponentType getComponentType(String id)
     {
         for (ComponentType componentType : loadedComponents)
         {

@@ -1,4 +1,4 @@
-package com.techmage.magetech.electronics;
+package com.techmage.magetech.electronics.component;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ public class ComponentType
 {
     private String name;
 
-    String id;
+    private String id;
 
     private ArrayList<ComponentPin> pins;
 
@@ -48,6 +48,6 @@ public class ComponentType
     @Override
     public String toString()
     {
-        return String.format("magetech.electronics.component.%s", name.toLowerCase());
+        return String.format("magetech.electronics.component.%s", id);
     }
 }

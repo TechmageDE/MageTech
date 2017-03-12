@@ -1,4 +1,4 @@
-package com.techmage.magetech.electronics;
+package com.techmage.magetech.electronics.component;
 
 import java.util.ArrayList;
 
@@ -35,14 +35,6 @@ public class Component
     public ArrayList<Connection> getConnections()
     {
         return connections;
-    }
-
-    public String getPinName(ComponentPin pin)
-    {
-        if (componentType.getPins().contains(pin))
-            return String.format("%s.%s", name, pin.getName());
-
-        return "INVALID";
     }
 
     @Override

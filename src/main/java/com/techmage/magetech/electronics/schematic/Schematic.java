@@ -1,4 +1,6 @@
-package com.techmage.magetech.electronics;
+package com.techmage.magetech.electronics.schematic;
+
+import com.techmage.magetech.electronics.component.Component;
 
 import java.util.ArrayList;
 
@@ -44,6 +46,6 @@ public class Schematic
     @Override
     public String toString()
     {
-        return String.format("magetech.electronics.schematic:%s", name);
+        return String.format("magetech.electronics.schematic:%s", id);
     }
 }

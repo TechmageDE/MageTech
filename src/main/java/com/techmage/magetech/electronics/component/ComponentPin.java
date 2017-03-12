@@ -1,4 +1,4 @@
-package com.techmage.magetech.electronics;
+package com.techmage.magetech.electronics.component;
 
 public class ComponentPin
 {
@@ -45,6 +45,10 @@ public class ComponentPin
     @Override
     public String toString()
     {
-        return String.format("magetech.electronics.component.pin:%s", this.name);
+        if (nameCombined == null)
+            return String.format("magetech.electronics.component.pin:%s", this.name);
+
+        else
+            return String.format("magetech.electronics.component.pin:%s", this.nameCombined);
     }
 }
