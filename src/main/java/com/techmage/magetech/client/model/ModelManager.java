@@ -32,8 +32,7 @@ public class ModelManager
     {
         final Item item = Item.getItemFromBlock(block);
 
-        if (item != null)
-            registerItemModel(item);
+        registerItemModel(item);
     }
 
     private void registerBlockItemModel(Block block, String modelLocation)
@@ -63,7 +62,9 @@ public class ModelManager
 
     private void registerItemModel(Item item, String modelLocation)
     {
-        final ModelResourceLocation fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
+        final ModelResourceLocation fullModelLocation;
+
+        fullModelLocation = new ModelResourceLocation(modelLocation, "inventory");
 
         registerItemModel(item, fullModelLocation);
     }

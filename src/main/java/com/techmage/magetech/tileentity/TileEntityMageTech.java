@@ -7,9 +7,12 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class TileEntityMageTech extends TileEntity
 {
-    protected String customName;
+    private String customName;
 
     protected EnumFacing facing;
 
@@ -20,6 +23,7 @@ public class TileEntityMageTech extends TileEntity
         facing = EnumFacing.NORTH;
     }
 
+    @Nonnull
     public String getCustomName()
     {
         return customName;
@@ -30,6 +34,7 @@ public class TileEntityMageTech extends TileEntity
         this.customName = customName;
     }
 
+    @Nonnull
     public EnumFacing getOrientation()
     {
         return facing;
@@ -58,6 +63,7 @@ public class TileEntityMageTech extends TileEntity
     }
 
     @Override
+    @Nonnull
     public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound)
     {
         super.writeToNBT(nbtTagCompound);
@@ -71,13 +77,14 @@ public class TileEntityMageTech extends TileEntity
     }
 
     @Override
+    @Nullable
     public SPacketUpdateTileEntity getUpdatePacket()
     {
-        NBTTagCompound tagCompound = new NBTTagCompound();
+        NBTTagCompound tag = getTileData().copy();
 
-        writeToNBT(tagCompound);
+        writeToNBT(tag);
 
-        return new SPacketUpdateTileEntity(pos, 1, tagCompound);
+        return new SPacketUpdateTileEntity(this.getPos(), this.getBlockMetadata(), tag);
     }
 
     @Override
@@ -88,7 +95,19 @@ public class TileEntityMageTech extends TileEntity
         readFromNBT(tag);
     }
 
-    public boolean hasCustomName()
+    @Override
+    public NBTTagCompound getUpdateTag()
+    {
+        return writeToNBT(new NBTTagCompound());
+    }
+
+    @Override
+    public void handleUpdateTag(@Nullable NBTTagCompound tag)
+    {
+        readFromNBT(tag);
+    }
+
+    protected boolean hasCustomName()
     {
         return customName != null && customName.length() > 0;
     }

@@ -3,7 +3,10 @@ package com.techmage.magetech.electronics;
 import com.techmage.magetech.electronics.component.ComponentPin;
 import com.techmage.magetech.electronics.component.ComponentType;
 import com.techmage.magetech.electronics.loader.LoaderComponent;
+import com.techmage.magetech.item.ItemElectronicComponent;
+import com.techmage.magetech.registry.ItemRegistry;
 import com.techmage.magetech.utility.LogHelper;
+import net.minecraft.item.Item;
 import scala.collection.Iterator;
 import scala.reflect.io.Directory;
 import scala.reflect.io.Path;
@@ -26,6 +29,8 @@ public class ManagerComponent
         this.loaderComponent = new LoaderComponent(MOD_ID);
 
         this.loadedComponents = loadAllComponents();
+
+        registerComponents();
     }
 
     public ArrayList<ComponentType> loadAllComponents()
@@ -41,7 +46,12 @@ public class ManagerComponent
         Iterator<Path> dir = new Directory(new File(path)).list();
 
         while (dir.hasNext())
-            componentsLoaded.add(loaderComponent.loadComponent(dir.next().name()));
+        {
+            String dirName = dir.next().name();
+
+            if (dirName.contains(".cmp"))
+                componentsLoaded.add(loaderComponent.loadComponent(dirName));
+        }
 
         for (ComponentType componentType : componentsLoaded)
         {
@@ -66,5 +76,13 @@ public class ManagerComponent
         }
 
         return null;
+    }
+
+    private void registerComponents()
+    {
+        Item COMPONENT;
+
+        for (ComponentType component : loadedComponents)
+            COMPONENT = ItemRegistry.registerItem(new ItemElectronicComponent(component.getId()));
     }
 }

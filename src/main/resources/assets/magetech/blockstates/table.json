@@ -1,7 +1,9 @@
 {
     "variants":
     {
-        "double=false": { "model": "magetech:table" },
-        "double=true":  { "model": "magetech:table" }
+        "inventory": { "model": "magetech:table_single" },
+
+        "double=false": { "model": "magetech:table_single" },
+        "double=true":  { "model": "magetech:table_double" }
     }
 }

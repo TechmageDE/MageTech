@@ -68,7 +68,7 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
             NBTTagCompound tagWood = tag.getCompoundTag(TileEntityWooden.TAG_WOOD);
             ItemStack wood = new ItemStack(tagWood);
 
-            tooltip.add(wood.getDisplayName().substring(0, (wood.getDisplayName().length() - 5)));
+            //tooltip.add(wood.getDisplayName().substring(0, (wood.getDisplayName().length() - 5)));
         }
     }
 
@@ -106,7 +106,7 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     }
 
     @Override
-    public boolean removedByPlayer(IBlockState state, World world,BlockPos pos, EntityPlayer player, boolean willHarvest)
+    public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest)
     {
         this.onBlockDestroyedByPlayer(world, pos, state);
 
@@ -118,7 +118,7 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
         return false;
     }
 
-    private void writeDataOntoItemStack(ItemStack item, IBlockAccess world, BlockPos pos, IBlockState state, boolean inventorySave)
+    private void writeDataOntoItemStack(ItemStack item, IBlockAccess world, BlockPos pos)
     {
         TileEntity tile = world.getTileEntity(pos);
 
@@ -141,18 +141,14 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     }
 
     @Override
-    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
+    public void dropBlockAsItemWithChance(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, float chance, int fortune)
     {
         if (!worldIn.isRemote && !worldIn.restoringBlockSnapshots)
         {
             List<ItemStack> items = this.getDrops(worldIn, pos, state, fortune);
             chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, worldIn, pos, state, fortune, chance, false, harvesters.get());
 
-            for (ItemStack item : items)
-            {
-                if (item.getItem() == Item.getItemFromBlock(this))
-                    writeDataOntoItemStack(item, worldIn, pos, state, chance >= 1f);
-            }
+            items.stream().filter(item -> item.getItem() == Item.getItemFromBlock(this)).forEach(item -> writeDataOntoItemStack(item, worldIn, pos));
 
             for (ItemStack item : items)
             {
@@ -163,14 +159,15 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
+    @Nonnull
+    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player)
     {
         List<ItemStack> drops = getDrops(world, pos, world.getBlockState(pos), 0);
 
         if (drops.size() > 0)
         {
             ItemStack stack = drops.get(0);
-            writeDataOntoItemStack(stack, world, pos, state, false);
+            writeDataOntoItemStack(stack, world, pos);
 
             return stack;
         }
@@ -188,6 +185,7 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     }
 
     @Override
+    @Nonnull
     public IBlockState getExtendedState(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos)
     {
         IExtendedBlockState extendedState = (IExtendedBlockState) state;
@@ -225,18 +223,22 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     }
 
     @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state)
     {
         return false;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     @SideOnly(Side.CLIENT)
     public boolean isOpaqueCube(IBlockState state)
     {
@@ -244,13 +246,15 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, EnumFacing side)
     {
         return true;
     }
 
     @Override
+    @Nonnull
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {

@@ -5,6 +5,7 @@ import com.techmage.magetech.electronics.ManagerSchematic;
 import com.techmage.magetech.proxy.CommonProxy;
 import com.techmage.magetech.proxy.IProxy;
 import com.techmage.magetech.reference.Reference;
+import com.techmage.magetech.utility.BlockStateReader;
 import com.techmage.magetech.utility.LogHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -28,6 +29,12 @@ public class MageTech
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        //managerComponent = new ManagerComponent(Reference.MOD_ID);
+        //managerSchematic = new ManagerSchematic(Reference.MOD_ID);
+
+        BlockStateReader blockStateReader = new BlockStateReader(Reference.MOD_ID);
+        blockStateReader.getModelsForStates("table");
+
         commonProxy.preInit();
         sidedProxy.preInit();
 
@@ -42,9 +49,6 @@ public class MageTech
 
         commonProxy.registerEventHandlers();
         sidedProxy.registerEventHandlers();
-
-        managerComponent = new ManagerComponent(Reference.MOD_ID);
-        managerSchematic = new ManagerSchematic(Reference.MOD_ID);
 
         LogHelper.info("Initialization Complete!");
     }

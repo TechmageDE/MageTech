@@ -1,12 +1,12 @@
 package com.techmage.magetech.client.model.bakedmodel;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.techmage.magetech.block.BlockWooden;
 import com.techmage.magetech.tileentity.TileEntityWooden;
 import com.techmage.magetech.utility.ModelHelper;
+import com.techmage.magetech.utility.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -29,18 +29,20 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class BakedModelWooden implements IPerspectiveAwareModel
 {
-    protected IPerspectiveAwareModel modelDefault;
-    protected IRetexturableModel modelWooden;
+    private IPerspectiveAwareModel modelDefault;
+    private IRetexturableModel modelWooden;
 
-    protected final Map<Map<String, EnumFacing>, IBakedModel> cache = Maps.newHashMap();
-    protected final Function<ResourceLocation, TextureAtlasSprite> textureGetter;
+    private final Function<ResourceLocation, TextureAtlasSprite> textureGetter;
     protected final VertexFormat format;
+    protected final Map<Map<String, EnumFacing>, IBakedModel> cache = Maps.newHashMap();
 
     public BakedModelWooden(IPerspectiveAwareModel modelDefault, IRetexturableModel modelWooden, VertexFormat format)
     {
@@ -51,36 +53,36 @@ public class BakedModelWooden implements IPerspectiveAwareModel
         this.format = format;
     }
 
-    protected IBakedModel getActualModel(String texture, EnumFacing facing)
+    private IBakedModel getActualModel(@Nonnull String texture, EnumFacing facing)
     {
         IBakedModel bakedModel = modelDefault;
 
-        if (texture != null)
+        Map<String, EnumFacing> cacheKey = Maps.newHashMap();
+        cacheKey.put(texture, facing);
+
+        if (cache.containsKey(cacheKey))
+            bakedModel = cache.get(cacheKey);
+
+        else if (modelWooden != null)
         {
-            Map<String, EnumFacing> cacheKey = Maps.newHashMap();
-            cacheKey.put(texture, facing);
+            ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
 
-            if (cache.containsKey(cacheKey))
-                bakedModel = cache.get(cacheKey);
+            builder.put("wood", texture);
+            IModel modelRetextured = modelWooden.retexture(builder.build());
 
-            else if (modelWooden != null)
-            {
-                ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+            facing = facing != null ? facing : EnumFacing.NORTH;
 
-                builder.put("wood", texture);
-                IModel modelRetextured = modelWooden.retexture(builder.build());
+            bakedModel = modelRetextured.bake(new TRSRTransformation(TRSRTransformation.getMatrix(facing)), format, textureGetter::apply);
 
-                bakedModel = modelRetextured.bake(new TRSRTransformation(TRSRTransformation.getMatrix(facing)), format, textureGetter);
-
-                cache.put(cacheKey, bakedModel);
-            }
+            cache.put(cacheKey, bakedModel);
         }
 
         return bakedModel;
     }
 
     @Override
-    public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand)
+    @Nonnull
+    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand)
     {
         String texture = null;
         EnumFacing face = EnumFacing.NORTH;
@@ -97,6 +99,8 @@ public class BakedModelWooden implements IPerspectiveAwareModel
 
             state = extendedState.withProperty(BlockWooden.FACING, null);
         }
+
+        assert texture != null;
 
         if (texture.matches("missingno"))
             texture = "minecraft:blocks/planks_oak";
@@ -123,39 +127,43 @@ public class BakedModelWooden implements IPerspectiveAwareModel
     }
 
     @Override
+    @Nonnull
     public TextureAtlasSprite getParticleTexture()
     {
         return modelDefault.getParticleTexture();
     }
 
     @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
     public ItemCameraTransforms getItemCameraTransforms()
     {
         return modelDefault.getItemCameraTransforms();
     }
 
-    @Nonnull
     @Override
+    @Nonnull
     public ItemOverrideList getOverrides()
     {
-        return TableItemOverrideList.INSTANCE;
+        return WoodenItemOverrideList.INSTANCE;
     }
 
-    private static class TableItemOverrideList extends ItemOverrideList
+    private static class WoodenItemOverrideList extends ItemOverrideList
     {
-        static TableItemOverrideList INSTANCE = new TableItemOverrideList();
+        static WoodenItemOverrideList INSTANCE = new WoodenItemOverrideList();
 
-        private TableItemOverrideList()
+        private WoodenItemOverrideList()
         {
             super(ImmutableList.of());
         }
 
         @Override
-        public IBakedModel handleItemState(IBakedModel modelOriginal, ItemStack stack, World world, EntityLivingBase entity)
+        @Nonnull
+        public IBakedModel handleItemState(@Nonnull IBakedModel modelOriginal, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity)
         {
             if (modelOriginal instanceof BakedModelWooden)
             {
-                ItemStack blockStack = new ItemStack(stack.getTagCompound().getCompoundTag(TileEntityWooden.TAG_WOOD));
+                ItemStack blockStack = new ItemStack(NBTHelper.getTagCompound(stack, TileEntityWooden.TAG_WOOD));
 
                 if (blockStack != ItemStack.EMPTY)
                 {

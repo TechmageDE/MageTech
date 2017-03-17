@@ -1,8 +1,9 @@
 package com.techmage.magetech.event;
 
-import com.techmage.magetech.client.model.bakedmodel.BakedModelTable;
 import com.techmage.magetech.client.model.bakedmodel.BakedModelWooden;
 import com.techmage.magetech.reference.Names;
+import com.techmage.magetech.reference.Reference;
+import com.techmage.magetech.utility.BlockStateReader;
 import com.techmage.magetech.utility.LogHelper;
 import com.techmage.magetech.utility.ResourceHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -20,17 +21,25 @@ public class EventHandlerModelWoodenReplace
     @SubscribeEvent
     public void onModelBake(ModelBakeEvent event)
     {
-        replaceBlockModel(Names.Blocks.TABLE, "normal", event);
-        replaceBlockModel(Names.Blocks.SHELF_SCROLL, "normal", event);
+        replaceBlockModels(Names.Blocks.TABLE, event);
+        replaceBlockModels(Names.Blocks.SHELF_SCROLL, event);
     }
 
-    private static void replaceBlockModel(String blockName, String variant, ModelBakeEvent event)
+    private void replaceBlockModels(String blockName, ModelBakeEvent event)
+    {
+        BlockStateReader blockStateReader = new BlockStateReader(Reference.MOD_ID);
+
+        for (String[] modelForState : blockStateReader.getModelsForStates(blockName))
+            replaceBlockModel(blockName, modelForState[0], modelForState[1], event);
+    }
+
+    private static void replaceBlockModel(String blockName, String variant, String modelName, ModelBakeEvent event)
     {
         ModelResourceLocation modelVariantLocation = new ModelResourceLocation(ResourceHelper.resource(blockName), variant);
 
         try
         {
-            IModel model = ModelLoaderRegistry.getModel(ResourceHelper.getResource("block/" + blockName));
+            IModel model = ModelLoaderRegistry.getModel(ResourceHelper.getResource("block/" + modelName));
 
             if (model instanceof IRetexturableModel)
             {
@@ -41,10 +50,7 @@ public class EventHandlerModelWoodenReplace
                 {
                     IBakedModel finalModel;
 
-                    if (blockName == Names.Blocks.TABLE)
-                        finalModel = new BakedModelTable((IPerspectiveAwareModel) standard, modelWooden, DefaultVertexFormats.BLOCK);
-                    else
-                        finalModel = new BakedModelWooden((IPerspectiveAwareModel) standard, modelWooden, DefaultVertexFormats.BLOCK);
+                    finalModel = new BakedModelWooden((IPerspectiveAwareModel) standard, modelWooden, DefaultVertexFormats.BLOCK);
 
                     event.getModelRegistry().putObject(modelVariantLocation, finalModel);
                 }

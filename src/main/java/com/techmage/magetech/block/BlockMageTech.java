@@ -16,16 +16,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
-public class BlockMageTech extends Block
+class BlockMageTech extends Block
 {
     public BlockMageTech(String name)
     {
         this(Material.GROUND, name);
     }
 
-    public BlockMageTech(Material material, String name)
+    BlockMageTech(Material material, String name)
     {
         super(material);
 
@@ -34,19 +35,21 @@ public class BlockMageTech extends Block
 
         setCreativeTab(CreativeTabsMageTech.MAGETECH);
     }
+
     @Override
+    @Nonnull
     public String getUnlocalizedName()
     {
         return String.format("tile.%s%s", Textures.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
-    protected String getUnwrappedUnlocalizedName(String unlocalizedName)
+    private String getUnwrappedUnlocalizedName(String unlocalizedName)
     {
         return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state)
     {
         dropInventory(worldIn, pos);
 
@@ -56,7 +59,7 @@ public class BlockMageTech extends Block
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        if (worldIn.getTileEntity(pos) instanceof TileEntityMageTech)
+        if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityMageTech)
         {
             int direction = 0;
             int facing = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
@@ -73,14 +76,19 @@ public class BlockMageTech extends Block
             else if (facing == 3)
                 direction = EnumFacing.WEST.ordinal();
 
-            ((TileEntityMageTech) worldIn.getTileEntity(pos)).setOrientation(direction);
+            TileEntityMageTech tileMageTech = (TileEntityMageTech) worldIn.getTileEntity(pos);
 
-            if (stack.hasDisplayName())
-                ((TileEntityMageTech) worldIn.getTileEntity(pos)).setCustomName(stack.getDisplayName());
+            if (tileMageTech != null)
+            {
+                tileMageTech.setOrientation(direction);
+
+                if (stack.hasDisplayName())
+                    tileMageTech.setCustomName(stack.getDisplayName());
+            }
         }
     }
 
-    protected void dropInventory(World worldIn, BlockPos pos)
+    private void dropInventory(World worldIn, BlockPos pos)
     {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
 
