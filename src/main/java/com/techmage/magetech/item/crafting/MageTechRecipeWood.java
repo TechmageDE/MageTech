@@ -15,8 +15,8 @@ import java.util.List;
 
 public class MageTechRecipeWood extends ShapedOreRecipe
 {
-    List<ItemStack> woodList = new ArrayList<>();
-    ItemStack woodCraftedWith = ItemStack.EMPTY;
+    private List<ItemStack> woodList = new ArrayList<>();
+    private ItemStack woodCraftedWith = ItemStack.EMPTY;
 
     public MageTechRecipeWood(Block result, Object... recipe)
     {
@@ -67,6 +67,7 @@ public class MageTechRecipeWood extends ShapedOreRecipe
                     boolean matched = false;
 
                     Iterator<ItemStack> itr = ((List<ItemStack>)target).iterator();
+
                     while (itr.hasNext() && !matched)
                         matched = OreDictionary.itemMatches(itr.next(), slot, false);
 
@@ -102,8 +103,9 @@ public class MageTechRecipeWood extends ShapedOreRecipe
             }
 
             woodCraftedWith = woodType;
-            woodList.clear();
         }
+
+        woodList.clear();
 
         return true;
     }

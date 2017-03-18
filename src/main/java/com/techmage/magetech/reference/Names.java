@@ -21,4 +21,10 @@ public class Names
 
         public static final String WOOD_MYSTIC = "wood_mystic";
     }
+
+    public static final class TileEntity
+    {
+        public static final String WOODEN = "wooden";
+        public static final String SHELF_SCROLLS = "shelf_scrolls";
+    }
 }
