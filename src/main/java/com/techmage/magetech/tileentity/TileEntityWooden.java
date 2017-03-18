@@ -3,6 +3,8 @@ package com.techmage.magetech.tileentity;
 import com.techmage.magetech.block.BlockWooden;
 import com.techmage.magetech.utility.ModelHelper;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +30,9 @@ public class TileEntityWooden extends TileEntityMageTech
         if (texture.isEmpty())
         {
             ItemStack stack = new ItemStack(getTileData().getCompoundTag(TAG_WOOD));
+
+            if (stack.getItem() == Item.getItemFromBlock(Blocks.AIR))
+                stack = new ItemStack(Blocks.WOODEN_SLAB, 1, 0);
 
             Block block = Block.getBlockFromItem(stack.getItem());
             texture = ModelHelper.getTextureFromBlock(block, stack.getItemDamage()).getIconName();

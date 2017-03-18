@@ -18,5 +18,7 @@ public class Names
     {
         public static final String TABLE = "table";
         public static final String SHELF_SCROLL = "shelf_scroll";
+
+        public static final String WOOD_MYSTIC = "wood_mystic";
     }
 }

@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-class BlockMageTech extends Block
+public class BlockMageTech extends Block
 {
     public BlockMageTech(String name)
     {

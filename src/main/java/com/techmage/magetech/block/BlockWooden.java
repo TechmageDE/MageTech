@@ -3,15 +3,16 @@ package com.techmage.magetech.block;
 import com.techmage.magetech.block.unlistedproperties.UnlistedPropertyFacing;
 import com.techmage.magetech.block.unlistedproperties.UnlistedPropertyString;
 import com.techmage.magetech.tileentity.TileEntityWooden;
+import com.techmage.magetech.utility.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -28,8 +30,10 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockWooden extends BlockMageTech implements ITileEntityProvider
@@ -59,6 +63,28 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
 
     @Override
     @SideOnly(Side.CLIENT)
+    public void getSubBlocks(@Nonnull Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+    {
+        ArrayList<String> registered = new ArrayList<>();
+
+        for (ItemStack woodType : OreDictionary.getOres("slabWood"))
+        {
+            for (int meta = 0; meta < 16; meta ++)
+            {
+                woodType.setItemDamage(meta);
+
+                if (!registered.contains(woodType.getUnlocalizedName()))
+                {
+                    registered.add(woodType.getUnlocalizedName());
+
+                    list.add(createItemStack(this, 0, Block.getBlockFromItem(woodType.getItem()), woodType.getMetadata()));
+                }
+            }
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
         NBTTagCompound tag = stack.getTagCompound();
@@ -68,7 +94,7 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
             NBTTagCompound tagWood = tag.getCompoundTag(TileEntityWooden.TAG_WOOD);
             ItemStack wood = new ItemStack(tagWood);
 
-            //tooltip.add(wood.getDisplayName().substring(0, (wood.getDisplayName().length() - 5)));
+            tooltip.add(wood.getDisplayName().substring(0, (wood.getDisplayName().length() - 5)));
         }
     }
 
@@ -77,28 +103,12 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
     {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
 
-        NBTTagCompound tag = stack.getTagCompound();
-
-        if (tag == null)
-        {
-            tag = new NBTTagCompound();
-
-            ItemStack blockStack = new ItemStack(Blocks.WOODEN_SLAB, 1, 0);
-            NBTTagCompound subTag = new NBTTagCompound();
-
-            blockStack.writeToNBT(subTag);
-
-            tag.setTag(TileEntityWooden.TAG_WOOD, subTag);
-
-            stack.setTagCompound(tag);
-        }
-
         TileEntity tile = world.getTileEntity(pos);
 
         if (tile != null && tile instanceof TileEntityWooden)
         {
             TileEntityWooden tileWooden = (TileEntityWooden) tile;
-            NBTTagCompound tagWood = tag.getCompoundTag(TileEntityWooden.TAG_WOOD);
+            NBTTagCompound tagWood = NBTHelper.getTagCompound(stack, TileEntityWooden.TAG_WOOD);
 
             tileWooden.updateTextureBlock(tagWood);
             tileWooden.setFacing(placer.getHorizontalFacing().getOpposite());
@@ -202,17 +212,17 @@ public class BlockWooden extends BlockMageTech implements ITileEntityProvider
         return super.getExtendedState(state, world, pos);
     }
 
-    public static ItemStack createItemStack(BlockWooden table, int tableMeta, Block block, int blockMeta)
+    public static ItemStack createItemStack(BlockWooden blockWooden, int woodenMeta, Block blockWood, int woodMeta)
     {
-        ItemStack stack = new ItemStack(table, 1, tableMeta);
+        ItemStack stack = new ItemStack(blockWooden, 1, woodenMeta);
 
-        if (block != null)
+        if (blockWood != null)
         {
-            ItemStack blockStack = new ItemStack(block, 1, blockMeta);
+            ItemStack woodStack = new ItemStack(blockWood, 1, woodMeta);
             NBTTagCompound tag = new NBTTagCompound();
             NBTTagCompound subTag = new NBTTagCompound();
 
-            blockStack.writeToNBT(subTag);
+            woodStack.writeToNBT(subTag);
 
             tag.setTag(TileEntityWooden.TAG_WOOD, subTag);
 
