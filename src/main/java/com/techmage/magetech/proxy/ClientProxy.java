@@ -1,11 +1,9 @@
 package com.techmage.magetech.proxy;
 
 import com.techmage.magetech.client.model.ModelManager;
-import com.techmage.magetech.event.EventHandlerModelWoodenReplace;
 import com.techmage.magetech.utility.LogHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ClientProxy extends CommonProxy
@@ -56,6 +54,6 @@ public class ClientProxy extends CommonProxy
     @Override
     public void registerEventHandlers()
     {
-        MinecraftForge.EVENT_BUS.register(new EventHandlerModelWoodenReplace());
+
     }
 }

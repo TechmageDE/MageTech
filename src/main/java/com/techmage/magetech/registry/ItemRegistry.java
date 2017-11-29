@@ -13,6 +13,7 @@ public class ItemRegistry
     public static <T extends Item> T registerItem(T item)
     {
         GameRegistry.register(item);
+
         ITEMS.add(item);
 
         return item;
