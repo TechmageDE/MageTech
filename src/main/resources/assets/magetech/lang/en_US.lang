@@ -1,11 +1,2 @@
 # Creative Tabs
 itemGroup.magetech=MageTech
-
-#Items
-item.magetech:research_note.name=Research Note
-item.magetech:research_scroll.name=Research Scroll
-
-#Blocks
-tile.magetech:table.name=Wooden Table
-
-tile.magetech:shelf_scroll.name=Scroll Shelf

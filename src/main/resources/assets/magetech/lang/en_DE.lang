@@ -1,11 +1,2 @@
-# Creative Tabs
+﻿# Creative Tabs
 itemGroup.magetech=MageTech
-
-#Items
-item.magetech:research_note.name=Forschungsnotiz
-item.magetech:research_scroll.name=Forschungsergebnis
-
-#Blocks
-tile.magetech:table.name=Holztisch
-
-tile.magetech:shelf_scroll.name=Regal für Schriftrollen

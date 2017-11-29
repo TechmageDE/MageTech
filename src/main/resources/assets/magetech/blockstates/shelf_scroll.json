@@ -1,8 +1,0 @@
-{
-    "variants":
-    {
-        "inventory": { "model": "magetech:shelf_scroll" },
-
-        "normal": { "model": "magetech:shelf_scroll" }
-    }
-}
